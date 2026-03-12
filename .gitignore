@@ -1,0 +1,31 @@
+# Виртуальное окружение
+.venv/
+venv/
+env/
+
+# Файлы Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# База данных
+*.sqlite3
+*.db
+
+# Медиа файлы
+/media/
+
+# Файлы IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Системные файлы Windows
+Thumbs.db
+Desktop.ini
+
+# Файлы с секретами
+.env
+.env.local

@@ -1,0 +1,82 @@
+{% extends 'roadmap/base.html' %}
+
+{% block title %}{{ level.name }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+                <li class="breadcrumb-item active">{{ level.name }}</li>
+            </ol>
+        </nav>
+
+        <h1>{{ level.name }}</h1>
+        {% if level.timeframe %}
+        <p class="lead">Рекомендуемый срок: {{ level.timeframe }}</p>
+        {% endif %}
+        <p>{{ level.description }}</p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <h2>Технологии для изучения</h2>
+
+        {% regroup technologies by category as technologies_by_category %}
+
+        {% for category in technologies_by_category %}
+        <div class="card mb-4">
+            <div class="card-header bg-light">
+                <h3 class="h5 mb-0">
+                    {% if category.grouper %}
+                    {{ category.grouper.name }}
+                    {% else %}
+                    Без категории
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="list-group">
+                    {% for tech in category.list %}
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between align-items-center">
+                            <div>
+                                <h4 class="h6 mb-1">{{ tech.name }}</h4>
+                                <small class="text-muted">{{ tech.description|truncatewords:20 }}</small>
+                            </div>
+                            <div>
+                                {% if tech.difficulty == 'beginner' %}
+                                <span class="badge bg-success">🟢 Начальный</span>
+                                {% elif tech.difficulty == 'intermediate' %}
+                                <span class="badge bg-warning text-dark">🟡 Средний</span>
+                                {% elif tech.difficulty == 'advanced' %}
+                                <span class="badge bg-danger">🔴 Продвинутый</span>
+                                {% endif %}
+
+                                {% if tech.official_docs_url %}
+                                <a href="{{ tech.official_docs_url }}" target="_blank"
+                                    class="btn btn-sm btn-outline-primary ms-2">Доки</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-warning">
+            В этом уровне пока нет добавленных технологий.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <a href="{% url 'home' %}" class="btn btn-secondary">← Назад к уровням</a>
+    </div>
+</div>
+{% endblock %}

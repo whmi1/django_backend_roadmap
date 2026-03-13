@@ -15,11 +15,16 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Category',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, verbose_name='Название категории')),
-                ('slug', models.SlugField(max_length=100, unique=True, verbose_name='URL-идентификатор')),
-                ('description', models.TextField(blank=True, verbose_name='Описание категории')),
-                ('icon', models.ImageField(blank=True, help_text='SVG или PNG иконка для категории', null=True, upload_to='categories/icons/', verbose_name='Иконка')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=100,
+                 verbose_name='Название категории')),
+                ('slug', models.SlugField(max_length=100,
+                 unique=True, verbose_name='URL-идентификатор')),
+                ('description', models.TextField(
+                    blank=True, verbose_name='Описание категории')),
+                ('icon', models.ImageField(blank=True, help_text='SVG или PNG иконка для категории',
+                 null=True, upload_to='categories/icons/', verbose_name='Иконка')),
             ],
             options={
                 'verbose_name': 'Категория',
@@ -29,12 +34,18 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Level',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(help_text='Например: Новорождённый бекендер', max_length=100, verbose_name='Название уровня')),
-                ('slug', models.SlugField(help_text='Уникальное имя для URL, на основе названия. Должно содержать только латиницу, цифры, дефисы и подчеркивания.', max_length=100, unique=True, verbose_name='URL-идентификатор')),
-                ('timeframe', models.CharField(blank=True, help_text='Например: 1–3 месяца', max_length=50, null=True, verbose_name='Срок освоения')),
-                ('order', models.PositiveSmallIntegerField(default=0, help_text='Чем меньше число, тем выше уровень в списке', verbose_name='Порядок отображения')),
-                ('description', models.TextField(blank=True, help_text='Краткое описание того, что будет изучено на этом этапе', verbose_name='Описание уровня')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(help_text='Например: Новорождённый бекендер',
+                 max_length=100, verbose_name='Название уровня')),
+                ('slug', models.SlugField(help_text='Уникальное имя для URL, на основе названия. Должно содержать только латиницу, цифры, дефисы и подчеркивания.',
+                 max_length=100, unique=True, verbose_name='URL-идентификатор')),
+                ('timeframe', models.CharField(blank=True, help_text='Например: 1–3 месяца',
+                 max_length=50, null=True, verbose_name='Срок освоения')),
+                ('order', models.PositiveSmallIntegerField(
+                    default=0, help_text='Чем меньше число, тем выше уровень в списке', verbose_name='Порядок отображения')),
+                ('description', models.TextField(
+                    blank=True, help_text='Краткое описание того, что будет изучено на этом этапе', verbose_name='Описание уровня')),
             ],
             options={
                 'verbose_name': 'Уровень',
@@ -45,18 +56,30 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Technology',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=200, verbose_name='Название технологии')),
-                ('slug', models.SlugField(max_length=200, unique=True, verbose_name='URL-идентификатор')),
-                ('description', models.TextField(help_text='Что это такое и зачем это учить. 1-2 предложения.', verbose_name='Описание')),
-                ('difficulty', models.CharField(choices=[('beginner', '🟢 Начальный'), ('intermediate', '🟡 Средний'), ('advanced', '🔴 Продвинутый')], default='beginner', max_length=20, verbose_name='Уровень сложности')),
-                ('order_in_level', models.PositiveSmallIntegerField(default=0, help_text='Чем меньше число, тем выше в списке', verbose_name='Порядок в рамках уровня')),
-                ('official_docs_url', models.URLField(blank=True, verbose_name='Ссылка на официальную документацию')),
-                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата добавления')),
-                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='Дата обновления')),
-                ('is_published', models.BooleanField(default=True, verbose_name='Опубликовано')),
-                ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='technologies', to='roadmap.category', verbose_name='Категория')),
-                ('level', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='technologies', to='roadmap.level', verbose_name='Уровень обучения')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=200,
+                 verbose_name='Название технологии')),
+                ('slug', models.SlugField(max_length=200,
+                 unique=True, verbose_name='URL-идентификатор')),
+                ('description', models.TextField(
+                    help_text='Что это такое и зачем это учить. 1-2 предложения.', verbose_name='Описание')),
+                ('difficulty', models.CharField(choices=[('beginner', '🟢 Начальный'), ('intermediate', '🟡 Средний'), (
+                    'advanced', '🔴 Продвинутый')], default='beginner', max_length=20, verbose_name='Уровень сложности')),
+                ('order_in_level', models.PositiveSmallIntegerField(
+                    default=0, help_text='Чем меньше число, тем выше в списке', verbose_name='Порядок в рамках уровня')),
+                ('official_docs_url', models.URLField(blank=True,
+                 verbose_name='Ссылка на официальную документацию')),
+                ('created_at', models.DateTimeField(
+                    auto_now_add=True, verbose_name='Дата добавления')),
+                ('updated_at', models.DateTimeField(
+                    auto_now=True, verbose_name='Дата обновления')),
+                ('is_published', models.BooleanField(
+                    default=True, verbose_name='Опубликовано')),
+                ('category', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL,
+                 related_name='technologies', to='roadmap.category', verbose_name='Категория')),
+                ('level', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='technologies', to='roadmap.level', verbose_name='Уровень обучения')),
             ],
             options={
                 'verbose_name': 'Технология',
@@ -67,14 +90,21 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Resource',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=300, verbose_name='Название ресурса')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(
+                    max_length=300, verbose_name='Название ресурса')),
                 ('url', models.URLField(verbose_name='Ссылка')),
-                ('resource_type', models.CharField(choices=[('video', '📺 Видео'), ('article', '📝 Статья'), ('course', '🎓 Курс'), ('book', '📚 Книга'), ('tool', '🔧 Инструмент')], default='article', max_length=20, verbose_name='Тип ресурса')),
-                ('description', models.TextField(blank=True, verbose_name='Краткое описание')),
-                ('is_free', models.BooleanField(default=True, verbose_name='Бесплатный')),
-                ('order', models.PositiveSmallIntegerField(default=0, verbose_name='Порядок отображения')),
-                ('technology', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='resources', to='roadmap.technology', verbose_name='Технология')),
+                ('resource_type', models.CharField(choices=[('video', '📺 Видео'), ('article', '📝 Статья'), ('course', '🎓 Курс'), (
+                    'book', '📚 Книга'), ('tool', '🔧 Инструмент')], default='article', max_length=20, verbose_name='Тип ресурса')),
+                ('description', models.TextField(
+                    blank=True, verbose_name='Краткое описание')),
+                ('is_free', models.BooleanField(
+                    default=True, verbose_name='Бесплатный')),
+                ('order', models.PositiveSmallIntegerField(
+                    default=0, verbose_name='Порядок отображения')),
+                ('technology', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='resources', to='roadmap.technology', verbose_name='Технология')),
             ],
             options={
                 'verbose_name': 'Учебный ресурс',

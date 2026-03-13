@@ -1,0 +1,40 @@
+{% extends 'roadmap/base.html' %}
+
+{% block title %}Главная - Backend Roadmap{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 text-center mb-5">
+        <h1>Roadmap для Backend-разработчика</h1>
+        <p class="lead">Интерактивный путеводитель по этапам становления backend-разработчика</p>
+    </div>
+</div>
+
+<div class="row">
+    {% for level in levels %}
+    <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">{{ level.name }}</h5>
+                {% if level.timeframe %}
+                <h6 class="card-subtitle mb-2 text-muted">Срок: {{ level.timeframe }}</h6>
+                {% endif %}
+                <p class="card-text">{{ level.description|truncatewords:30 }}</p>
+
+                {% with tech_count=level.technologies.count %}
+                <p class="text-muted">Технологий: {{ tech_count }}</p>
+                {% endwith %}
+
+                <a href="{% url 'level_detail' level.slug %}" class="btn btn-primary">Подробнее</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">
+            Пока нет добавленных уровней. Зайдите в <a href="/admin/">админку</a>, чтобы добавить.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

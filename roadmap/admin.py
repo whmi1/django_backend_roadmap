@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Level, Category, Technology, Resource
+from .models import Level, Category, Technology, Resource, UserProgress
 
 
 @admin.register(Level)
@@ -34,3 +34,11 @@ class ResourceAdmin(admin.ModelAdmin):
     list_filter = ('resource_type', 'is_free')
     search_fields = ('title', 'technology__name')
     autocomplete_fields = ('technology',)
+
+
+@admin.register(UserProgress)
+class UserProgressAdmin(admin.ModelAdmin):
+    list_display = ('user', 'technology', 'completed', 'completed_at')
+    list_filter = ('completed', 'user')
+    search_fields = ('user__username', 'technology__name')
+    autocomplete_fields = ('user', 'technology')

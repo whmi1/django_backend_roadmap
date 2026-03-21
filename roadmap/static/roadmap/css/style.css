@@ -32,3 +32,145 @@ main {
         font-size: 2rem;
     }
 }
+
+.tech-item {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+.tech-header {
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+}
+
+.tech-header:hover {
+    background-color: #e9ecef;
+}
+
+.tech-header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.tech-checkbox {
+    width: 1.2rem;
+    height: 1.2rem;
+    cursor: pointer;
+}
+
+.tech-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.tech-badges {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.tech-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background-color: #fff;
+    border-radius: 0 0 0.5rem 0.5rem;
+}
+
+.tech-item.expanded .tech-details {
+    max-height: 500px;
+    transition: max-height 0.5s ease-in;
+}
+
+.tech-details-content {
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.resources-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0 0;
+}
+
+.resource-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.resource-item:last-child {
+    border-bottom: none;
+}
+
+.resource-icon {
+    font-size: 1.5rem;
+    margin-right: 0.75rem;
+    min-width: 2rem;
+    text-align: center;
+}
+
+.resource-info {
+    flex: 1;
+}
+
+.resource-title {
+    margin: 0;
+    font-weight: 500;
+}
+
+.resource-description {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.resource-link {
+    color: #0d6efd;
+    text-decoration: none;
+    margin-left: 0.5rem;
+}
+
+.resource-link:hover {
+    text-decoration: underline;
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.category-progress {
+    min-width: 200px;
+}
+
+.progress-text {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-left: 0.5rem;
+}
+
+.expand-indicator {
+    font-size: 1.2rem;
+    color: #6c757d;
+    transition: transform 0.2s;
+}
+
+.tech-item.expanded .expand-indicator {
+    transform: rotate(180deg);
+}

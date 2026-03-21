@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'roadmap_db',
         'USER': 'roadmap_user',
-        'PASSWORD': 'your_user_password',
+        'PASSWORD': 'Roadmap2026!',
         'HOST': 'localhost',
         'PORT': 5432,
     }
@@ -126,3 +126,7 @@ STATIC_URL = 'static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'

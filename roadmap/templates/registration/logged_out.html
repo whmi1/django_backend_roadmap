@@ -1,0 +1,20 @@
+{% extends 'roadmap/base.html' %}
+
+{% block title %}Выход - Backend Roadmap{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">Выход выполнен</h4>
+            </div>
+            <div class="card-body text-center">
+                <p class="lead">Вы успешно вышли из системы.</p>
+                <a href="{% url 'home' %}" class="btn btn-primary">Вернуться на главную</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">Войти снова</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

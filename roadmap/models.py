@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 class Level(models.Model):
@@ -214,3 +215,46 @@ class Resource(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.get_resource_type_display()})"
+
+
+class UserProgress(models.Model):
+    """
+    Модель для отслеживания прогресса пользователя по технологиям
+    """
+    user = models.ForeignKey(
+        'auth.User',
+        on_delete=models.CASCADE,
+        related_name='progress',
+        verbose_name="Пользователь"
+    )
+    technology = models.ForeignKey(
+        Technology,
+        on_delete=models.CASCADE,
+        related_name='progress',
+        verbose_name="Технология")
+    completed = models.BooleanField(
+        default=False,
+        verbose_name="Изучено"
+    )
+    completed_at = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name="Дата изучения"
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания"
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата обновления"
+    )
+
+    class Meta:
+        verbose_name = "Прогресс пользователя"
+        verbose_name_plural = "Прогресс пользователей"
+        unique_together = ['user', 'technology']
+
+    def __str__(self):
+        status = "✅" if self.completed else "⏳"
+        return f"{self.user.username} - {self.technology.name} - {status}"

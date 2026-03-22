@@ -258,3 +258,41 @@ class UserProgress(models.Model):
     def __str__(self):
         status = "✅" if self.completed else "⏳"
         return f"{self.user.username} - {self.technology.name} - {status}"
+
+
+class Profile(models.Model):
+    """
+    Модель для дополнительной информации о пользователе
+    """
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile',
+        verbose_name="Пользователь"
+    )
+    avatar = models.ImageField(
+        upload_to='avatars/',
+        verbose_name="Аватарка",
+        blank=True,
+        null=True
+    )
+    bio = models.TextField(
+        verbose_name="О себе",
+        blank=True,
+        max_length=500
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Дата создания"
+    )
+    updated_at = models.DateTimeField(
+        auto_now=True,
+        verbose_name="Дата обновления"
+    )
+
+    class Meta:
+        verbose_name = "Профиль"
+        verbose_name_plural = "Профили"
+
+    def __str__(self):
+        return f"Профиль {self.user.username}"

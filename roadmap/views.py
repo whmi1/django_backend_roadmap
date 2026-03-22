@@ -2,13 +2,15 @@ import json
 
 
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
+from django.contrib.auth import login, update_session_auth_hash
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from .models import Level, Category, Technology, UserProgress
+from .models import Level, Category, Technology, UserProgress, Profile
+from django.contrib.auth.models import User
+from django import forms
 
 
 def index(request):
@@ -156,3 +158,128 @@ def toggle_progress(request):
             'success': False,
             'message': str(e)
         }, status=500)
+    
+
+class UserUpdateForm(forms.ModelForm):
+    """Форма обновления данных пользователя"""
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    """Форма обновления профиля"""
+    class Meta:
+        model = Profile
+        fields = ['avatar', 'bio']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['avatar'].widget.attrs.update({'class': 'form-control'})
+        self.fields['bio'].widget.attrs.update({'class': 'form-control', 'rows': 4})
+
+
+@login_required
+def profile_view(request):
+    """Страница профиля с прогрессом и настройками"""
+    user = request.user
+    
+    profile, created = Profile.objects.get_or_create(user=user)
+    
+    levels = Level.objects.all().order_by('order')
+    levels_progress = []
+    total_technologies = 0
+    total_completed = 0
+    
+    for level in levels:
+        technologies = Technology.objects.filter(level=level, is_published=True)
+        tech_count = technologies.count()
+        
+        completed_count = UserProgress.objects.filter(
+            user=user,
+            technology__in=technologies,
+            completed=True
+        ).count()
+        
+        percent = int((completed_count / tech_count * 100)) if tech_count > 0 else 0
+        
+        total_technologies += tech_count
+        total_completed += completed_count
+        
+        levels_progress.append({
+            'level': level,
+            'total': tech_count,
+            'completed': completed_count,
+            'percent': percent
+        })
+    
+    total_percent = int((total_completed / total_technologies * 100)) if total_technologies > 0 else 0
+    
+    context = {
+        'user': user,
+        'profile': profile,
+        'levels_progress': levels_progress,
+        'total_technologies': total_technologies,
+        'total_completed': total_completed,
+        'total_percent': total_percent,
+        'title': 'Мой профиль'
+    }
+    
+    return render(request, 'roadmap/profile.html', context)
+
+
+@login_required
+def profile_edit(request):
+    """Редактирование профиля"""
+    user = request.user
+    profile, created = Profile.objects.get_or_create(user=user)
+    
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=user)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=profile)
+        
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, 'Профиль успешно обновлён!')
+            return redirect('profile')
+    else:
+        user_form = UserUpdateForm(instance=user)
+        profile_form = ProfileUpdateForm(instance=profile)
+    
+    context = {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'title': 'Редактирование профиля'
+    }
+    
+    return render(request, 'roadmap/profile_edit.html', context)
+
+
+@login_required
+def change_password(request):
+    """Смена пароля"""
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Пароль успешно изменён!')
+            return redirect('profile')
+        else:
+            for error in form.errors.values():
+                messages.error(request, error)
+    else:
+        form = PasswordChangeForm(request.user)
+    
+    context = {
+        'form': form,
+        'title': 'Смена пароля'
+    }
+    
+    return render(request, 'roadmap/change_password.html', context)

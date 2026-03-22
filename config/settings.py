@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 import os
 
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-niv=h$-tjimh%u7&7w3)g+^l+b2(map7&2r&d^+@07j@!28+xc'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-fallback-key-for-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
 
 
 # Application definition
@@ -79,11 +82,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'roadmap_db',
-        'USER': 'roadmap_user',
-        'PASSWORD': 'Roadmap2026!',
-        'HOST': 'localhost',
-        'PORT': 5432,
+        'NAME': os.environ.get('DB_NAME', 'roadmap_db'),
+        'USER': os.environ.get('DB_USER', 'roadmap_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', ''),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
 

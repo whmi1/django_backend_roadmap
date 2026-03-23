@@ -53,6 +53,12 @@
                         <a class="nav-link" href="/admin/">Админка</a>
                     </li>
                     {% endif %}
+                    <li class="nav-item">
+                        <form method="get" action="{% url 'search' %}" class="d-flex" role="search">
+                            <input class="form-control me-2" type="search" name="q" placeholder="Поиск технологий..." aria-label="Search" value="{{ request.GET.q }}" required>
+                            <button class="btn btn-outline-light" type="submit">🔍</button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>

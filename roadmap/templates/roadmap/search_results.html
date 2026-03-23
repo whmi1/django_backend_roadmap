@@ -1,0 +1,80 @@
+{% extends 'roadmap/base.html' %}
+{% load static %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Главная</a></li>
+                <li class="breadcrumb-item active">Поиск</li>
+            </ol>
+        </nav>
+        
+        <h1>Поиск</h1>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <form method="get" action="{% url 'search' %}" class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" name="q" placeholder="Введите название технологии..." aria-label="Search" value="{{ query }}" style="flex: 1;">
+                    <button class="btn btn-primary" type="submit">Найти</button>
+                </form>
+            </div>
+        </div>
+        
+        {% if query %}
+            <h2>Результаты поиска: "{{ query }}"</h2>
+            <p class="text-muted">Найдено {{ results_count }} технологий</p>
+            
+            {% if results %}
+                <div class="list-group">
+                    {% for tech in results %}
+                    <div class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h5 class="mb-1">
+                                    <a href="{% url 'level_detail' tech.level.slug %}#tech-{{ tech.id }}" class="text-decoration-none">
+                                        {{ tech.name }}
+                                    </a>
+                                </h5>
+                                <p class="mb-1">{{ tech.description|truncatewords:30 }}</p>
+                                <div class="mt-2">
+                                    <span class="badge bg-secondary">Уровень: {{ tech.level.name }}</span>
+                                    {% if tech.category %}
+                                    <span class="badge bg-info">Категория: {{ tech.category.name }}</span>
+                                    {% endif %}
+                                    {% if tech.difficulty == 'beginner' %}
+                                    <span class="badge bg-success">🟢 Начальный</span>
+                                    {% elif tech.difficulty == 'intermediate' %}
+                                    <span class="badge bg-warning text-dark">🟡 Средний</span>
+                                    {% elif tech.difficulty == 'advanced' %}
+                                    <span class="badge bg-danger">🔴 Продвинутый</span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if tech.official_docs_url %}
+                            <a href="{{ tech.official_docs_url }}" target="_blank" class="btn btn-sm btn-outline-primary ms-3">Доки</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-warning mt-3">
+                    Ничего не найдено. Попробуйте изменить поисковый запрос.
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info mt-3">
+                Введите поисковый запрос, чтобы найти технологии.
+            </div>
+        {% endif %}
+        
+        <div class="mt-4">
+            <a href="{% url 'home' %}" class="btn btn-secondary">← На главную</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

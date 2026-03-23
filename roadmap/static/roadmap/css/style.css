@@ -174,3 +174,32 @@ main {
 .tech-item.expanded .expand-indicator {
     transform: rotate(180deg);
 }
+
+.list-group-item:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+    transition: all 0.2s ease;
+}
+
+.navbar form input {
+    min-width: 200px;
+}
+
+@media (max-width: 768px) {
+    .navbar form {
+        width: 100%;
+        margin: 10px 0;
+    }
+    .navbar form input {
+        width: 100%;
+    }
+}
+
+.tech-item.highlight {
+    animation: highlight 2s ease;
+}
+
+@keyframes highlight {
+    0% { background-color: rgba(255, 193, 7, 0.3); }
+    100% { background-color: transparent; }
+}

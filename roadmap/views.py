@@ -6,6 +6,7 @@ from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth import login, update_session_auth_hash
 from django.contrib import messages
 from django.http import JsonResponse
+from django.db import models
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from .models import Level, Category, Technology, UserProgress, Profile
@@ -283,3 +284,26 @@ def change_password(request):
     }
     
     return render(request, 'roadmap/change_password.html', context)
+
+
+def search(request):
+    """Поиск технологий по названию и описанию"""
+    query = request.GET.get('q', '').strip()
+    results = []
+    
+    if query:
+        results = Technology.objects.filter(
+            is_published=True
+        ).filter(
+            models.Q(name__icontains=query) |
+            models.Q(description__icontains=query)
+        ).select_related('level', 'category')
+    
+    context = {
+        'query': query,
+        'results': results,
+        'results_count': results.count(),
+        'title': f'Результаты поиска: {query}' if query else 'Поиск'
+    }
+    
+    return render(request, 'roadmap/search_results.html', context)

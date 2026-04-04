@@ -221,6 +221,12 @@ class UserProgress(models.Model):
     """
     Модель для отслеживания прогресса пользователя по технологиям
     """
+    STATUS_CHOICES = [
+        ('not_started', '⚪ Не начато'),
+        ('in_progress', '🟡 В процессе'),
+        ('completed', '✅ Выполнено'),
+    ]
+    
     user = models.ForeignKey(
         'auth.User',
         on_delete=models.CASCADE,
@@ -231,15 +237,18 @@ class UserProgress(models.Model):
         Technology,
         on_delete=models.CASCADE,
         related_name='progress',
-        verbose_name="Технология")
-    completed = models.BooleanField(
-        default=False,
-        verbose_name="Изучено"
+        verbose_name="Технология"
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='not_started',
+        verbose_name="Статус"
     )
     completed_at = models.DateTimeField(
         blank=True,
         null=True,
-        verbose_name="Дата изучения"
+        verbose_name="Дата завершения"
     )
     created_at = models.DateTimeField(
         auto_now_add=True,
@@ -256,8 +265,12 @@ class UserProgress(models.Model):
         unique_together = ['user', 'technology']
 
     def __str__(self):
-        status = "✅" if self.completed else "⏳"
-        return f"{self.user.username} - {self.technology.name} - {status}"
+        status_icon = {
+            'not_started': '⚪',
+            'in_progress': '🟡',
+            'completed': '✅'
+        }.get(self.status, '⚪')
+        return f"{self.user.username} - {self.technology.name} - {status_icon}"
 
 
 class Profile(models.Model):

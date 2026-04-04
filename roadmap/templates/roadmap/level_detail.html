@@ -66,7 +66,14 @@
                         <div class="tech-header">
                             <div class="tech-header-left">
                                 {% if user.is_authenticated %}
-                                <input type="checkbox" class="tech-checkbox" data-tech-id="{{ tech.id }}" {% if user_progress|get_item:tech.id %}checked{% endif %}>
+                                <div class="tech-status-selector">
+                                    <select class="tech-status" data-tech-id="{{ tech.id }}">
+                                        <option value="not_started" {% if user_progress|get_item:tech.id == 'not_started' %}selected{% endif %}>⚪ Не начато</option>
+                                        <option value="in_progress" {% if user_progress|get_item:tech.id == 'in_progress' %}selected{% endif %}>🟡 В процессе</option>
+                                        <option value="completed" {% if user_progress|get_item:tech.id == 'completed' %}selected{% endif %}>✅ Выполнено</option>
+                                    </select>
+                                    <span class="status-dot"></span>
+                                </div>
                                 {% endif %}
                                 <h4 class="tech-title">{{ tech.name }}</h4>
                             </div>

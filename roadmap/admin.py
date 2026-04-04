@@ -38,7 +38,8 @@ class ResourceAdmin(admin.ModelAdmin):
 
 @admin.register(UserProgress)
 class UserProgressAdmin(admin.ModelAdmin):
-    list_display = ('user', 'technology', 'completed', 'completed_at')
-    list_filter = ('completed', 'user')
+    list_display = ('user', 'technology', 'status', 'completed_at', 'updated_at')
+    list_filter = ('status', 'user')
     search_fields = ('user__username', 'technology__name')
     autocomplete_fields = ('user', 'technology')
+    list_editable = ('status',)

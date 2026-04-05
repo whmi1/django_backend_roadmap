@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .then(data => {
                 if (data.success) {
                     updateProgressBars();
+                    applyFilter();
                     showNotification(data.message, 'success');
                 } else {
                     showNotification(data.message, 'error');
@@ -48,6 +49,67 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error:', error);
                 showNotification('Произошла ошибка', 'error');
             });
+        });
+    });
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    let currentFilter = 'all';
+
+    function applyFilter() {
+        const techItemsAll = document.querySelectorAll('.tech-item');
+        let visibleCount = 0;
+
+        techItemsAll.forEach(item => {
+            const select = item.querySelector('.tech-status');
+            if (!select) {
+                item.style.display = '';
+                visibleCount++;
+                return;
+            }
+
+            const status = select.value;
+            
+            if (currentFilter === 'all' || status === currentFilter) {
+                item.style.display = '';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        const noResultsMsg = document.getElementById('no-results-message');
+        if (noResultsMsg) {
+            if (visibleCount === 0 && currentFilter !== 'all') {
+                noResultsMsg.classList.remove('d-none');
+            } else {
+                noResultsMsg.classList.add('d-none');
+            }
+        }
+
+        const categoryCards = document.querySelectorAll('.category-card');
+        categoryCards.forEach(card => {
+            const visibleItems = card.querySelectorAll('.tech-item[style="display: block;"], .tech-item[style=""]');
+            let hasVisible = false;
+            card.querySelectorAll('.tech-item').forEach(item => {
+                if (item.style.display !== 'none') {
+                    hasVisible = true;
+                }
+            });
+            card.style.display = hasVisible ? '' : 'none';
+        });
+    }
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            filterBtns.forEach(b => b.classList.remove('active', 'btn-primary'));
+            filterBtns.forEach(b => b.classList.add('btn-outline-secondary'));
+            
+            this.classList.remove('btn-outline-secondary');
+            this.classList.add('active', 'btn-primary');
+            
+            currentFilter = this.dataset.filter;
+            
+            applyFilter();
         });
     });
 
@@ -95,5 +157,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     setTimeout(function() {
         updateProgressBars();
+        applyFilter();
     }, 500);
 });

@@ -33,6 +33,30 @@
     <div class="col-12">
         <h2>Технологии для изучения</h2>
 
+        <!-- Фильтр по статусам -->
+        {% if user.is_authenticated %}
+        <div class="mb-4">
+            <div class="btn-group" role="group" aria-label="Фильтр по статусу">
+                <button type="button" class="btn btn-outline-secondary filter-btn active" data-filter="all">
+                    Все
+                </button>
+                <button type="button" class="btn btn-outline-secondary filter-btn" data-filter="not_started">
+                    ⚪ Не начато
+                </button>
+                <button type="button" class="btn btn-outline-secondary filter-btn" data-filter="in_progress">
+                    🟡 В процессе
+                </button>
+                <button type="button" class="btn btn-outline-secondary filter-btn" data-filter="completed">
+                    ✅ Выполнено
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        <div id="no-results-message" class="alert alert-info d-none">
+            Нет технологий, соответствующих выбранному фильтру.
+        </div>
+
         {% regroup technologies by category as technologies_by_category %}
 
         {% for category in technologies_by_category %}
